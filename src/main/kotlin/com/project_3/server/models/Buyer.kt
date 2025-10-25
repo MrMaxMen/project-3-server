@@ -11,6 +11,7 @@ data class Buyer(
 
     var name: String,
     var email: String,
+    var password: String,
 
 
     @OneToMany(mappedBy = "buyer", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)

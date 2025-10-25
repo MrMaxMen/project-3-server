@@ -11,7 +11,7 @@ data class Item(
 
     var name: String,
     var description: String,
-    var imageURL : String,
+    var mediaURLs : MutableList<String> = mutableListOf(),
     var basePrice: Double,
     var stock : Int,
     var discount : Double? = null,
@@ -22,7 +22,7 @@ data class Item(
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn()
+    @JoinColumn
     var seller: Seller,
 
 
@@ -31,10 +31,14 @@ data class Item(
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn()
-    var category : Category ,
+    @JoinColumn
+    var category : Category,
 
     @OneToMany(mappedBy = "item", cascade = [CascadeType.ALL], orphanRemoval = true)
-    var orderItems: MutableList<OrderItem> = mutableListOf()
+    var orderItems: MutableList<OrderItem> = mutableListOf(),
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
+    val product: Product
 
 )

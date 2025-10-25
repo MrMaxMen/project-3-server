@@ -12,6 +12,9 @@ data class Category(
 
 
     @OneToMany(mappedBy = "category", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    var itemsList: MutableList<Item> = mutableListOf()
+    var itemsList: MutableList<Item> = mutableListOf(),
+
+    @OneToMany(mappedBy = "category", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    var productsList: MutableList<Item> = mutableListOf()
 
 )

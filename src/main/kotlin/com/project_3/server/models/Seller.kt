@@ -1,6 +1,7 @@
 package com.project_3.server.models
 
 import jakarta.persistence.*
+import java.time.LocalDateTime
 
 @Entity
 data class Seller(
@@ -14,6 +15,13 @@ data class Seller(
 
 
     @OneToMany(mappedBy = "seller", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    var itemsList : MutableList <Item> = mutableListOf()
+    var itemsList : MutableList <Item> = mutableListOf(),
+
+
+    var email : String,
+    var phoneNumber : String,
+    var createdAt : LocalDateTime,
+    var updatedAt : LocalDateTime,
+    var original : Boolean = false
 
 )
