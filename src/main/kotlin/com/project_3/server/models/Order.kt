@@ -4,6 +4,7 @@ import jakarta.persistence.*
 import java.time.LocalDateTime
 
 @Entity
+@Table(name = "\"order\"")
 data class Order(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
