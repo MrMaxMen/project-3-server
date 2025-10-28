@@ -10,19 +10,19 @@ import javax.crypto.SecretKey
 @Service
 class JwtService {
 
-    // в этом токене шифруется почта пользователя
+    // в этом токене шифруется id пользователя
 
     private val secretKey : SecretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256)
 
     private val expirationTime = 24 * 60 * 60 * 1000L
 
-    fun generateToken(email : String) : String {
+    fun generateToken(id : Long) : String {
 
         val now = Date()
         val expiryDate = Date(now.time + expirationTime)
 
         return Jwts.builder()
-            .setSubject(email)
+            .setSubject(id.toString())
             .setIssuedAt(now)
             .setExpiration(expiryDate)
             .signWith(secretKey)
@@ -41,14 +41,14 @@ class JwtService {
         }
     }
 
-    fun extractEmail(token: String): String? {
+    fun extractId(token: String): Long? {
         return try {
             val claims = Jwts.parserBuilder()
                 .setSigningKey(secretKey)
                 .build()
                 .parseClaimsJws(token)
                 .body
-            claims.subject
+            claims.subject.toLong()
         } catch (ex: Exception) {
             null
         }

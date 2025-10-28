@@ -5,10 +5,11 @@ import com.project_3.server.InvalidPasswordException
 import com.project_3.server.UserNotFoundException
 import com.project_3.server.models.Buyer
 import com.project_3.server.repos.BuyerRepository
+import com.project_3.server.security.JwtService
 import org.springframework.stereotype.Service
 
 @Service
-class AuthService (private val buyerRepository: BuyerRepository) {
+class AuthService (private val buyerRepository: BuyerRepository,private val jwtService: JwtService) {
 
     fun register(name : String ,email : String , password : String ) : Buyer{
         if(buyerRepository.findByEmail(email) != null){
@@ -24,7 +25,7 @@ class AuthService (private val buyerRepository: BuyerRepository) {
         return buyerRepository.save(newBuyer)
     }
 
-    fun login(email: String , password: String): Buyer{
+    fun login(email: String , password: String): String{
         val buyer = buyerRepository.findByEmail(email)
             ?: throw UserNotFoundException()
 
@@ -32,6 +33,8 @@ class AuthService (private val buyerRepository: BuyerRepository) {
             throw InvalidPasswordException()
         }
 
-        return buyer
+        val token = jwtService.generateToken(buyer.id!!)
+
+        return token
     }
 }
