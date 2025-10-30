@@ -19,9 +19,10 @@ data class Seller(
 
 
     var email : String,
-    var phoneNumber : String,
-    var createdAt : LocalDateTime,
-    var updatedAt : LocalDateTime,
+    var password: String,
+    var phoneNumber : String? = null, // сделать
+    var createdAt : LocalDateTime? = null, // сделать
+    var updatedAt : LocalDateTime? = null, // сделать
     var original : Boolean = false
 
 )

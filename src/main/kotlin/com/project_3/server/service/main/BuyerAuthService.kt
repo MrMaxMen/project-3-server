@@ -9,7 +9,7 @@ import com.project_3.server.security.JwtService
 import org.springframework.stereotype.Service
 
 @Service
-class AuthService (private val buyerRepository: BuyerRepository,private val jwtService: JwtService) {
+class BuyerAuthService (private val buyerRepository: BuyerRepository, private val jwtService: JwtService) {
 
     fun register(name : String ,email : String , password : String ) : Buyer{
         if(buyerRepository.findByEmail(email) != null){
