@@ -18,6 +18,10 @@ data class Seller(
     var itemsList : MutableList <Item> = mutableListOf(),
 
 
+    @OneToMany(mappedBy = "seller", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    var productList : MutableList <Product> = mutableListOf(),
+
+
     var email : String,
     var password: String,
     var phoneNumber : String? = null, // сделать

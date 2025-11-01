@@ -54,5 +54,14 @@ class JwtService {
         }
     }
 
+    fun extractToken(authHeader: String?): String? {
+        if (authHeader == null) return null
+        return if (authHeader.startsWith("Bearer ")) {
+            authHeader.substring(7)
+        } else {
+            authHeader
+        }
+    }
+
 
 }

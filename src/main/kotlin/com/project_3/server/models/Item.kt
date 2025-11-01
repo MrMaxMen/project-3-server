@@ -1,5 +1,6 @@
 package com.project_3.server.models
 
+import com.fasterxml.jackson.annotation.JsonBackReference
 import jakarta.persistence.*
 
 @Entity
@@ -39,6 +40,7 @@ data class Item(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
-    val product: Product
+    @JsonBackReference
+    var product: Product
 
 )
