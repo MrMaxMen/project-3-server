@@ -41,6 +41,6 @@ data class Item(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     @JsonBackReference
-    var product: Product
+    var product: Product?
 
 )

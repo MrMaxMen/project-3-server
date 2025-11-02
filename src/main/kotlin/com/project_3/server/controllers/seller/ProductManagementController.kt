@@ -1,9 +1,9 @@
 package com.project_3.server.controllers.seller
 
-import com.project_3.server.ExtractIdErrorException
+
 import com.project_3.server.InvalidTokenException
 import com.project_3.server.NoTokenException
-import com.project_3.server.models.Product
+import com.project_3.server.dto.ProductDTO
 import com.project_3.server.security.JwtService
 import com.project_3.server.service.seller.ProductManagementService
 import org.springframework.http.ResponseEntity
@@ -24,7 +24,7 @@ class ProductManagementController (
     @PostMapping("/add")
     fun addProduct(
         @RequestHeader("Authorization") header: String?,
-        @RequestBody newProduct : Product
+        @RequestBody newProduct : ProductDTO
     ): ResponseEntity<String>{
 
         val token: String = jwtService.extractToken(header) ?: throw NoTokenException()

@@ -10,11 +10,11 @@ data class Product(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
-    val brand: String? = null,
+    var brand: String,
 
-    @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], orphanRemoval = true,fetch = FetchType.LAZY)
     @JsonManagedReference
-    val items: MutableList<Item> = mutableListOf(),
+    var items: MutableList<Item> = mutableListOf(),
 
 
     @ManyToOne(fetch = FetchType.LAZY)
