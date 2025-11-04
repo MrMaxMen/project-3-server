@@ -2,7 +2,9 @@ package com.project_3.server.service.seller
 
 import com.project_3.server.CategoryNotFoundException
 import com.project_3.server.ProductCreationErrorException
+import com.project_3.server.ProductNotFoundException
 import com.project_3.server.SellerNotFoundException
+import com.project_3.server.dto.ItemDTO2
 import com.project_3.server.dto.ProductDTO
 import com.project_3.server.models.Item
 import com.project_3.server.models.Product
@@ -26,9 +28,9 @@ class ProductManagementService (
 
         if(newProductDTO.items.isEmpty()) throw ProductCreationErrorException()
 
-        val seller = sellerRepository.findByIdOrNull(newProductDTO.seller.id) ?: throw SellerNotFoundException()
+        val seller = sellerRepository.findByIdOrNull(newProductDTO.sellerId) ?: throw SellerNotFoundException()
 
-        val category = categoryRepository.findByIdOrNull(newProductDTO.category.id) ?: throw CategoryNotFoundException()
+        val category = categoryRepository.findByIdOrNull(newProductDTO.categoryId) ?: throw CategoryNotFoundException()
 
         val newProduct = Product(
             brand = newProductDTO.brand,
@@ -53,11 +55,34 @@ class ProductManagementService (
             )
         }.toMutableList()
 
-
         newProduct.items = items
-
 
         productRepository.save(newProduct)
     }
+
+
+    fun addItem(newItem : ItemDTO2){
+
+        val product = productRepository.findByIdOrNull(newItem.productId) ?: throw ProductNotFoundException()
+
+        product.items.add(Item(
+            name = newItem.name,
+            description = newItem.description,
+            mediaURLs = newItem.mediaURLs,
+            basePrice = newItem.basePrice,
+            stock = newItem.stock,
+            discount = newItem.discount,
+            currentPrice = newItem.currentPrice,
+            rating = null,
+            reviewCount = null,
+            seller = product.seller,
+            category = product.category,
+            product =  product
+        ))
+
+        productRepository.save(product)
+
+    }
+
 
 }

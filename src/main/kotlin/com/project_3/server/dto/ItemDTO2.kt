@@ -1,6 +1,8 @@
 package com.project_3.server.dto
 
-data class ItemDTO(
+data class ItemDTO2 (
+
+    var productId: Long,
 
     var name: String,
     var description: String,
@@ -10,4 +12,4 @@ data class ItemDTO(
     var discount : Double? = null,
     var currentPrice : Double,
 
-)
+    )

@@ -36,3 +36,8 @@ class SellerNotFoundException(
 class CategoryNotFoundException(
     val exceptionMessage: String = "category not found id DB"
 ) : RuntimeException(exceptionMessage)
+
+
+class ProductNotFoundException(
+    val exceptionMessage: String = "product not found id DB"
+) : RuntimeException(exceptionMessage)

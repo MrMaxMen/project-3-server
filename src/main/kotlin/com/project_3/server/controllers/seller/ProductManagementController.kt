@@ -3,6 +3,7 @@ package com.project_3.server.controllers.seller
 
 import com.project_3.server.InvalidTokenException
 import com.project_3.server.NoTokenException
+import com.project_3.server.dto.ItemDTO2
 import com.project_3.server.dto.ProductDTO
 import com.project_3.server.security.JwtService
 import com.project_3.server.service.seller.ProductManagementService
@@ -26,9 +27,7 @@ class ProductManagementController (
         @RequestHeader("Authorization") header: String?,
         @RequestBody newProduct : ProductDTO
     ): ResponseEntity<String>{
-
         val token: String = jwtService.extractToken(header) ?: throw NoTokenException()
-
         if(!jwtService.validateToken(token)){
             throw InvalidTokenException()
         }
@@ -38,5 +37,21 @@ class ProductManagementController (
         return ResponseEntity.ok("Product added successfully")
     }
 
+    @PostMapping("/items/add")
+    fun addProductItem(
+        @RequestHeader("Authorization") header: String?,
+        @RequestBody newItem : ItemDTO2
+    ) : ResponseEntity<String> {
+        val token: String = jwtService.extractToken(header) ?: throw NoTokenException()
+        if(!jwtService.validateToken(token)){
+            throw InvalidTokenException()
+        }
+
+        productManagementService.addItem(newItem)
+
+        return ResponseEntity.ok("Item added successfully")
+    }
+
 
 }
+

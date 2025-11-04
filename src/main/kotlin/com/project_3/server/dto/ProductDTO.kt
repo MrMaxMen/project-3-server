@@ -4,10 +4,10 @@ data class ProductDTO(
 
     var brand: String,
 
-    var items: MutableList<ItemDTO> = mutableListOf(),
+    var items: MutableList<ItemDTO1> = mutableListOf(),
 
-    var category : CategoryDTO,
+    var categoryId : Long,
 
-    var seller: SellerDTO,
+    var sellerId: Long
 
-)
+    )
