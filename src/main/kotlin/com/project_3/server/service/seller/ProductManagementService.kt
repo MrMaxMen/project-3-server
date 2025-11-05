@@ -1,10 +1,12 @@
 package com.project_3.server.service.seller
 
 import com.project_3.server.CategoryNotFoundException
+import com.project_3.server.ItemNotExistException
 import com.project_3.server.ProductCreationErrorException
+import com.project_3.server.ProductNotExistException
 import com.project_3.server.ProductNotFoundException
 import com.project_3.server.SellerNotFoundException
-import com.project_3.server.dto.ItemDTO2
+import com.project_3.server.dto.ItemDTO1
 import com.project_3.server.dto.ProductDTO
 import com.project_3.server.models.Item
 import com.project_3.server.models.Product
@@ -61,9 +63,9 @@ class ProductManagementService (
     }
 
 
-    fun addItem(newItem : ItemDTO2){
+    fun addItem(productId : Long,newItem : ItemDTO1){
 
-        val product = productRepository.findByIdOrNull(newItem.productId) ?: throw ProductNotFoundException()
+        val product = productRepository.findByIdOrNull(productId) ?: throw ProductNotFoundException()
 
         product.items.add(Item(
             name = newItem.name,
@@ -83,6 +85,27 @@ class ProductManagementService (
         productRepository.save(product)
 
     }
+
+    fun deleteProduct(idProductToDelete : Long) {
+        if (!productRepository.existsById(idProductToDelete)) {
+            throw ProductNotExistException()
+        }
+
+        productRepository.deleteById(idProductToDelete)
+    }
+
+
+    fun deleteItem(idItemToDelete : Long) {
+        if (!itemRepository.existsById(idItemToDelete)) {
+            throw ItemNotExistException(idItemToDelete)
+        }
+
+        itemRepository.deleteById(idItemToDelete)
+    }
+
+
+
+
 
 
 }

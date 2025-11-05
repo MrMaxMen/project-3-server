@@ -3,11 +3,13 @@ package com.project_3.server.controllers.seller
 
 import com.project_3.server.InvalidTokenException
 import com.project_3.server.NoTokenException
-import com.project_3.server.dto.ItemDTO2
+import com.project_3.server.dto.ItemDTO1
 import com.project_3.server.dto.ProductDTO
 import com.project_3.server.security.JwtService
 import com.project_3.server.service.seller.ProductManagementService
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
@@ -37,19 +39,51 @@ class ProductManagementController (
         return ResponseEntity.ok("Product added successfully")
     }
 
-    @PostMapping("/items/add")
+    @PostMapping("/{id}/items/add")
     fun addProductItem(
         @RequestHeader("Authorization") header: String?,
-        @RequestBody newItem : ItemDTO2
+        @RequestBody newItem : ItemDTO1,
+        @PathVariable id: Long
     ) : ResponseEntity<String> {
         val token: String = jwtService.extractToken(header) ?: throw NoTokenException()
         if(!jwtService.validateToken(token)){
             throw InvalidTokenException()
         }
 
-        productManagementService.addItem(newItem)
+        productManagementService.addItem(productId = id ,newItem = newItem)
 
         return ResponseEntity.ok("Item added successfully")
+    }
+
+    @DeleteMapping("/{id}/delete")
+    fun deleteProduct(
+        @RequestHeader("Authorization") header: String?,
+        @PathVariable id : Long
+    ) : ResponseEntity<String> {
+        val token: String = jwtService.extractToken(header) ?: throw NoTokenException()
+        if(!jwtService.validateToken(token)){
+            throw InvalidTokenException()
+        }
+
+        productManagementService.deleteProduct(idProductToDelete = id)
+
+        return ResponseEntity.ok("product deleted successfully")
+    }
+
+
+    @DeleteMapping("/items/{id}/delete")
+    fun deleteItem(
+        @RequestHeader("Authorization") header: String?,
+        @PathVariable id : Long
+    ) : ResponseEntity<String> {
+        val token: String = jwtService.extractToken(header) ?: throw NoTokenException()
+        if(!jwtService.validateToken(token)){
+            throw InvalidTokenException()
+        }
+
+        productManagementService.deleteItem(idItemToDelete =  id)
+
+        return ResponseEntity.ok("item deleted successfully")
     }
 
 

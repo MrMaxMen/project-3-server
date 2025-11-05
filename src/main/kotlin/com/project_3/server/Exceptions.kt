@@ -39,5 +39,15 @@ class CategoryNotFoundException(
 
 
 class ProductNotFoundException(
-    val exceptionMessage: String = "product not found id DB"
+    val exceptionMessage: String = "product not found in DB"
+) : RuntimeException(exceptionMessage)
+
+class ProductNotExistException(
+    val exceptionMessage: String = "product not found in DB"
+) : RuntimeException(exceptionMessage)
+
+
+class ItemNotExistException(
+    val id : Long ,
+    val exceptionMessage : String = "item with id : $id not found"
 ) : RuntimeException(exceptionMessage)
