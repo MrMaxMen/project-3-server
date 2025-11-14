@@ -4,13 +4,9 @@ import jakarta.persistence.*
 import java.time.LocalDateTime
 
 @Entity
-data class Seller(
+class Seller(
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null,
 
-    var name: String,
     var rating: Double? = null,
 
 
@@ -22,11 +18,17 @@ data class Seller(
     var productList : MutableList <Product> = mutableListOf(),
 
 
-    var email : String,
-    var password: String,
     var phoneNumber : String? = null, // сделать
     var createdAt : LocalDateTime? = null, // сделать
     var updatedAt : LocalDateTime? = null, // сделать
-    var original : Boolean = false
+    var original : Boolean = false,
 
+    name : String,
+    email : String,
+    password : String
+
+) : User(
+    name = name,
+    email = email,
+    password = password
 )

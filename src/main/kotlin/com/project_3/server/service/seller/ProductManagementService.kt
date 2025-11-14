@@ -1,9 +1,8 @@
 package com.project_3.server.service.seller
 
 import com.project_3.server.CategoryNotFoundException
-import com.project_3.server.ItemNotExistException
+import com.project_3.server.ItemNotFoundException
 import com.project_3.server.ProductCreationErrorException
-import com.project_3.server.ProductNotExistException
 import com.project_3.server.ProductNotFoundException
 import com.project_3.server.SellerNotFoundException
 import com.project_3.server.dto.ItemDTO1
@@ -16,6 +15,7 @@ import com.project_3.server.repos.ProductRepository
 import com.project_3.server.repos.SellerRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 
 @Service
@@ -26,6 +26,7 @@ class ProductManagementService (
     private val sellerRepository: SellerRepository
 ){
 
+    @Transactional
     fun addProduct(newProductDTO : ProductDTO){
 
         if(newProductDTO.items.isEmpty()) throw ProductCreationErrorException()
@@ -63,9 +64,10 @@ class ProductManagementService (
     }
 
 
+    @Transactional
     fun addItem(productId : Long,newItem : ItemDTO1){
 
-        val product = productRepository.findByIdOrNull(productId) ?: throw ProductNotFoundException()
+        val product = productRepository.findByIdOrNull(productId) ?: throw ProductNotFoundException(productId)
 
         product.items.add(Item(
             name = newItem.name,
@@ -86,26 +88,32 @@ class ProductManagementService (
 
     }
 
+
+    @Transactional
     fun deleteProduct(idProductToDelete : Long) {
         if (!productRepository.existsById(idProductToDelete)) {
-            throw ProductNotExistException()
+            throw ProductNotFoundException(idProductToDelete)
         }
 
         productRepository.deleteById(idProductToDelete)
     }
 
 
+
+    @Transactional
     fun deleteItem(idItemToDelete : Long) {
-        if (!itemRepository.existsById(idItemToDelete)) {
-            throw ItemNotExistException(idItemToDelete)
+
+        val item = itemRepository.findByIdOrNull(idItemToDelete) ?: throw ItemNotFoundException(idItemToDelete)
+
+        val product  = item.product!!
+
+        product.items.remove(item)
+
+
+        if(product.items.isEmpty()){
+            productRepository.deleteById(product.id!!)
         }
-
-        itemRepository.deleteById(idItemToDelete)
     }
-
-
-
-
 
 
 }
