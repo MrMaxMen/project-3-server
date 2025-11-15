@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference
 import jakarta.persistence.*
 
 @Entity
-data class Product(
+class Product(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
