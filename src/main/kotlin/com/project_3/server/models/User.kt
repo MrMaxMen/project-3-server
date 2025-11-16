@@ -3,8 +3,9 @@ package com.project_3.server.models
 import jakarta.persistence.*
 
 @Entity
+@Table(name = "users") // имя User зарезервированно в PostgreSQL
 @Inheritance(strategy = InheritanceType.JOINED)
-class User (
+abstract class User (
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

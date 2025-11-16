@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
@@ -84,6 +85,39 @@ class ProductManagementController (
         productManagementService.deleteItem(idItemToDelete =  id)
 
         return ResponseEntity.ok("item deleted successfully")
+    }
+
+    @PutMapping("/items/{id}/modify")
+    fun modifyItem(
+        @RequestHeader("Authorization") header: String?,
+        @RequestBody modifiedItem : ItemDTO1,
+        @PathVariable id : Long
+    ) : ResponseEntity<String> {
+        val token: String = jwtService.extractToken(header) ?: throw NoTokenException()
+        if(!jwtService.validateToken(token)){
+            throw InvalidTokenException()
+        }
+
+        productManagementService.modifyItem(id,modifiedItem)
+
+        return ResponseEntity.ok("item modified successfully")
+    }
+
+
+    @PutMapping("/{id}/modify")
+    fun modifyProduct(
+        @RequestHeader("Authorization") header: String?,
+        @RequestBody modifiedProduct : ProductDTO,
+        @PathVariable id : Long
+    ) : ResponseEntity<String> {
+        val token: String = jwtService.extractToken(header) ?: throw NoTokenException()
+        if(!jwtService.validateToken(token)){
+            throw InvalidTokenException()
+        }
+
+        productManagementService.modifyProduct(id,modifiedProduct)
+
+        return ResponseEntity.ok("product modified successfully")
     }
 
 

@@ -115,5 +115,32 @@ class ProductManagementService (
         }
     }
 
+    @Transactional
+    fun modifyItem(id: Long, modifiedItem: ItemDTO1,){
+
+        val item = itemRepository.findByIdOrNull(id) ?: throw ItemNotFoundException(id)
+
+        item.name = modifiedItem.name
+        item.description = modifiedItem.description
+        item.mediaURLs = modifiedItem.mediaURLs
+        item.basePrice = modifiedItem.basePrice
+        item.stock = modifiedItem.stock
+        item.discount = modifiedItem.discount
+        item.currentPrice = modifiedItem.currentPrice
+
+        itemRepository.save(item)
+
+    }
+
+    @Transactional
+    fun modifyProduct(id : Long , modifiedProduct : ProductDTO){
+
+        val product = productRepository.findByIdOrNull(id) ?: throw ProductNotFoundException(id)
+
+        product.brand = modifiedProduct.brand
+
+        productRepository.save(product)
+    }
+
 
 }
