@@ -12,12 +12,28 @@ class Order(
 
     var orderDateTime : LocalDateTime,
 
+    var arrivalDateTime: LocalDateTime? = null,
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
+    var pickupPoint: PickupPoint? = null,
+
+
     @OneToMany(mappedBy = "order", cascade = [CascadeType.ALL], orphanRemoval = true)
     var orderItems: MutableList<OrderItem> = mutableListOf(),
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn()
+    @JoinColumn
     var buyer: Buyer,
 
+    @Enumerated(EnumType.STRING)
+    var status: OrderStatus = OrderStatus.IN_TRANSIT
+
 )
+
+enum class OrderStatus {
+    IN_TRANSIT,   // заказ в пути
+    ARRIVED,      // заказ прибыл в пункт выдачи
+    COMPLETED     // заказ забран
+}
