@@ -9,6 +9,11 @@ class UserNotFoundException(
     val exceptionMessage: String = "User not found"
 ) : RuntimeException(exceptionMessage)
 
+class BuyerNotFoundException(
+    val id : Long ,
+    val exceptionMessage: String = "Buyer with id $id not found"
+) : RuntimeException(exceptionMessage)
+
 class InvalidPasswordException(
     val exceptionMessage: String = "Invalid password"
 ) : RuntimeException(exceptionMessage)
@@ -44,8 +49,12 @@ class ProductNotFoundException(
 ) : RuntimeException(exceptionMessage)
 
 
-
 class ItemNotFoundException(
     val id : Long ,
     val exceptionMessage : String = "item with id : $id not found in DB"
+) : RuntimeException(exceptionMessage)
+
+class PickupPointNotFoundException(
+    val id : Long ,
+    val exceptionMessage : String = "pickup point with id : $id not found in DB"
 ) : RuntimeException(exceptionMessage)

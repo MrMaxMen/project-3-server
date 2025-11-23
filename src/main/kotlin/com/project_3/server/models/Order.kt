@@ -15,8 +15,8 @@ class Order(
     var arrivalDateTime: LocalDateTime? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn
-    var pickupPoint: PickupPoint? = null,
+    @JoinColumn(nullable = false)
+    var pickupPoint: PickupPoint,
 
 
     @OneToMany(mappedBy = "order", cascade = [CascadeType.ALL], orphanRemoval = true)
@@ -24,7 +24,7 @@ class Order(
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn
+    @JoinColumn(nullable = false)
     var buyer: Buyer,
 
     @Enumerated(EnumType.STRING)

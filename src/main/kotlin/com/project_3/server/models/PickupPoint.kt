@@ -11,6 +11,8 @@ class PickupPoint(
     var name: String,
 
     var address: String,
+    var latitude: Double,
+    var longitude: Double,
 
     var workingHours: String? = null,
 
