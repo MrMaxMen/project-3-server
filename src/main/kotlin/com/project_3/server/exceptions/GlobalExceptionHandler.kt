@@ -1,4 +1,4 @@
-package com.project_3.server
+package com.project_3.server.exceptions
 
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -15,9 +15,9 @@ class GlobalExceptionHandler {
         ResponseEntity(ApiError(ex.exceptionMessage), HttpStatus.CONFLICT)
 
 
-    @ExceptionHandler(UserNotFoundException::class)
-    fun handleUserNotFound(ex: UserNotFoundException) =
-        ResponseEntity(ApiError(ex.exceptionMessage), HttpStatus.NOT_FOUND)
+    @ExceptionHandler(UserNotFoundByEmailException::class)
+    fun handleUserNotFound(ex: UserNotFoundByEmailException) =
+        ResponseEntity(ApiError(ex.message!!), HttpStatus.NOT_FOUND)
 
 
     @ExceptionHandler(InvalidPasswordException::class)

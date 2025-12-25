@@ -16,10 +16,9 @@ class OrderItem(
     @JoinColumn(nullable = false)
     var item: Item,
 
-    var quantity: Int = 1,
+    var quantity: Int ,
 
     var priceAtPurchase: Double
-
 
 
 )

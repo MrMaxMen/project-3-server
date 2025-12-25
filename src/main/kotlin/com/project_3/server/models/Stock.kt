@@ -16,5 +16,5 @@ class Stock(
     var longitude: Double,
 
     @OneToMany(mappedBy = "stock", cascade = [CascadeType.ALL], orphanRemoval = true)
-    val stockItems: MutableList<StockItem> = mutableListOf()
+    val stockItems: MutableSet<StockItem> = mutableSetOf()
 )

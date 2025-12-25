@@ -1,23 +1,16 @@
-package com.project_3.server.service.main
+package com.project_3.server.service
 
-import com.project_3.server.BuyerNotFoundException
-import com.project_3.server.ItemNotFoundException
-import com.project_3.server.PickupPointNotFoundException
 import com.project_3.server.dto.OrderDTO
+import com.project_3.server.exceptions.BuyerNotFoundByIdException
+import com.project_3.server.exceptions.ItemNotFoundByIdException
+import com.project_3.server.exceptions.PickupPointNotFoundByIdException
 import com.project_3.server.models.Order
 import com.project_3.server.models.OrderItem
-import com.project_3.server.repos.BuyerRepository
-import com.project_3.server.repos.CategoryRepository
-import com.project_3.server.repos.ItemRepository
-import com.project_3.server.repos.OrderRepository
-import com.project_3.server.repos.PickupPointRepository
-import com.project_3.server.repos.ProductRepository
-import com.project_3.server.repos.SellerRepository
+import com.project_3.server.repos.*
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
-
 
 @Service
 class OrderManagementService(
@@ -27,15 +20,16 @@ class OrderManagementService(
     private val sellerRepository: SellerRepository,
     private val orderRepository: OrderRepository,
     private val buyerRepository: BuyerRepository,
-    private val pickupPointRepository: PickupPointRepository
+    private val pickupPointRepository: PickupPointRepository,
+    private val stockRepository: StockRepository
 ) {
 
     @Transactional
     fun createOrder(buyerId : Long,newOrderDTO : OrderDTO) {
 
-        val buyer = buyerRepository.findByIdOrNull(buyerId) ?: throw BuyerNotFoundException(buyerId)
+        val buyer = buyerRepository.findByIdOrNull(buyerId) ?: throw BuyerNotFoundByIdException(buyerId)
 
-        val pickupPoint = pickupPointRepository.findByIdOrNull(newOrderDTO.pickupPointId) ?: throw PickupPointNotFoundException(newOrderDTO.pickupPointId)
+        val pickupPoint = pickupPointRepository.findByIdOrNull(newOrderDTO.pickupPointId) ?: throw PickupPointNotFoundByIdException(newOrderDTO.pickupPointId)
 
 
 
@@ -50,7 +44,7 @@ class OrderManagementService(
 
 
         for(orderItem in newOrderDTO.orderItems){
-            val item = itemRepository.findByIdOrNull(orderItem.itemId) ?: throw ItemNotFoundException(orderItem.itemId)
+            val item = itemRepository.findByIdOrNull(orderItem.itemId) ?: throw ItemNotFoundByIdException(orderItem.itemId)
 
             val orderItem = OrderItem(
                 order = newOrder, // Will be set when the Order is created
@@ -65,6 +59,7 @@ class OrderManagementService(
         newOrder.orderItems = orderItemsList
 
         //нужно добавить списание айтемов со склада при создании заказа
+        //нужно вычеслить ближайший склад к пункту выдачи и списать оттуда
 
         orderRepository.save(newOrder)
 
