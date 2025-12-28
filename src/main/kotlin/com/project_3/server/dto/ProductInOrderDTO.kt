@@ -1,9 +1,9 @@
 package com.project_3.server.dto
 
 
-data class OrderItemDTO (
+data class ProductInOrderDTO (
 
-    var itemId : Long,
+    var productId : Long,
 
     var quantity : Int,
 

@@ -1,13 +1,13 @@
 package com.project_3.server.service
 
-import com.project_3.server.dto.ItemDTO1
-import com.project_3.server.dto.ProductDTO
+import com.project_3.server.dto.ProductDTO1
+import com.project_3.server.dto.ProductGroupDTO
 import com.project_3.server.exceptions.*
-import com.project_3.server.models.Item
 import com.project_3.server.models.Product
+import com.project_3.server.models.ProductGroup
 import com.project_3.server.repos.CategoryRepository
-import com.project_3.server.repos.ItemRepository
 import com.project_3.server.repos.ProductRepository
+import com.project_3.server.repos.ProductGroupRepository
 import com.project_3.server.repos.SellerRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -15,32 +15,32 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class ProductManagementService(
-        private val productRepository: ProductRepository,
-        private val itemRepository: ItemRepository,
-        private val categoryRepository: CategoryRepository,
-        private val sellerRepository: SellerRepository
+    private val productGroupRepository: ProductGroupRepository,
+    private val productRepository: ProductRepository,
+    private val categoryRepository: CategoryRepository,
+    private val sellerRepository: SellerRepository
 ) {
 
     @Transactional
-    fun addProduct(newProductDTO: ProductDTO) {
+    fun addProductGroup(newProductGroupDTO: ProductGroupDTO) {
 
-        if (newProductDTO.items.isEmpty()) throw ProductCreationErrorException()
+        if (newProductGroupDTO.items.isEmpty()) throw ProductGroupCreationErrorException()
 
         val seller =
-                sellerRepository.findByIdOrNull(newProductDTO.sellerId)
-                        ?: throw SellerNotFoundByIdException(newProductDTO.sellerId)
+                sellerRepository.findByIdOrNull(newProductGroupDTO.sellerId)
+                        ?: throw SellerNotFoundByIdException(newProductGroupDTO.sellerId)
 
         val category =
-                categoryRepository.findByIdOrNull(newProductDTO.categoryId)
-                        ?: throw CategoryNotFoundByIdException(newProductDTO.categoryId)
+                categoryRepository.findByIdOrNull(newProductGroupDTO.categoryId)
+                        ?: throw CategoryNotFoundByIdException(newProductGroupDTO.categoryId)
 
-        val newProduct = Product(brand = newProductDTO.brand, seller = seller, category = category)
+        val newProductGroup = ProductGroup(name = newProductGroupDTO.name, seller = seller, category = category)
 
-        val items =
-                newProductDTO
+        val productGroups =
+                newProductGroupDTO
                         .items
                         .map {
-                            Item(
+                            Product(
                                     name = it.name,
                                     description = it.description,
                                     mediaURLs = it.mediaURLs,
@@ -51,89 +51,89 @@ class ProductManagementService(
                                     reviewCount = null,
                                     seller = seller,
                                     category = category,
-                                    product = newProduct
+                                    productGroup = newProductGroup
                             )
                         }
                         .toMutableSet()
 
-        newProduct.items = items
+        newProductGroup.products = productGroups
 
-        productRepository.save(newProduct)
+        productGroupRepository.save(newProductGroup)
     }
 
     @Transactional
-    fun addItem(productId: Long, newItem: ItemDTO1) {
+    fun addProduct(productId: Long, newProduct: ProductDTO1) {
 
-        val product =
-                productRepository.findByIdOrNull(productId)
-                        ?: throw ProductNotFoundByIdException(productId)
+        val productGroup =
+                productGroupRepository.findByIdOrNull(productId)
+                        ?: throw ProductGroupNotFoundByIdException(productId)
 
-        product.items.add(
-                Item(
-                        name = newItem.name,
-                        description = newItem.description,
-                        mediaURLs = newItem.mediaURLs,
-                        basePrice = newItem.basePrice,
-                        discount = newItem.discount,
-                        currentPrice = newItem.currentPrice,
+        productGroup.products.add(
+                Product(
+                        name = newProduct.name,
+                        description = newProduct.description,
+                        mediaURLs = newProduct.mediaURLs,
+                        basePrice = newProduct.basePrice,
+                        discount = newProduct.discount,
+                        currentPrice = newProduct.currentPrice,
                         rating = null,
                         reviewCount = null,
-                        seller = product.seller,
-                        category = product.category,
-                        product = product,
+                        seller = productGroup.seller,
+                        category = productGroup.category,
+                        productGroup = productGroup,
                 )
         )
 
-        productRepository.save(product)
+        productGroupRepository.save(productGroup)
+    }
+
+    @Transactional
+    fun deleteProductGroup(idProductGroupToDelete: Long) {
+        if (!productGroupRepository.existsById(idProductGroupToDelete)) {
+            throw ProductGroupNotFoundByIdException(idProductGroupToDelete)
+        }
+
+        productGroupRepository.deleteById(idProductGroupToDelete)
     }
 
     @Transactional
     fun deleteProduct(idProductToDelete: Long) {
-        if (!productRepository.existsById(idProductToDelete)) {
-            throw ProductNotFoundByIdException(idProductToDelete)
-        }
 
-        productRepository.deleteById(idProductToDelete)
-    }
+        val product =
+                productRepository.findByIdOrNull(idProductToDelete)
+                        ?: throw ProductNotFoundByIdException(idProductToDelete)
 
-    @Transactional
-    fun deleteItem(idItemToDelete: Long) {
+        val productGroup = product.productGroup
 
-        val item =
-                itemRepository.findByIdOrNull(idItemToDelete)
-                        ?: throw ItemNotFoundByIdException(idItemToDelete)
+        productGroup.products.remove(product)
 
-        val product = item.product!!
-
-        product.items.remove(item)
-
-        if (product.items.isEmpty()) {
-            productRepository.deleteById(product.id!!)
+        if (productGroup.products.isEmpty()) {
+            productGroupRepository.deleteById(product.id!!)
         }
     }
 
     @Transactional
-    fun modifyItem(id: Long, modifiedItem: ItemDTO1) {
-
-        val item = itemRepository.findByIdOrNull(id) ?: throw ItemNotFoundByIdException(id)
-
-        item.name = modifiedItem.name
-        item.description = modifiedItem.description
-        item.mediaURLs = modifiedItem.mediaURLs
-        item.basePrice = modifiedItem.basePrice
-        item.discount = modifiedItem.discount
-        item.currentPrice = modifiedItem.currentPrice
-
-        itemRepository.save(item)
-    }
-
-    @Transactional
-    fun modifyProduct(id: Long, modifiedProduct: ProductDTO) {
+    fun modifyProductGroup(id: Long, modifiedProduct: ProductDTO1) {
 
         val product = productRepository.findByIdOrNull(id) ?: throw ProductNotFoundByIdException(id)
 
-        product.brand = modifiedProduct.brand
+        product.name = modifiedProduct.name
+        product.description = modifiedProduct.description
+        product.mediaURLs = modifiedProduct.mediaURLs
+        product.basePrice = modifiedProduct.basePrice
+        product.discount = modifiedProduct.discount
+        product.currentPrice = modifiedProduct.currentPrice
 
         productRepository.save(product)
+    }
+
+    @Transactional
+    fun modifyProductGroup(id: Long, modifiedProductGroup: ProductGroupDTO) {
+
+        val productGroup = productGroupRepository.findByIdOrNull(id) ?: throw ProductGroupNotFoundByIdException(id)
+
+        productGroup.name = modifiedProductGroup.name
+
+        productGroupRepository.save(productGroup)
     }
 }

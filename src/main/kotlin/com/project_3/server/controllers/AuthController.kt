@@ -2,8 +2,8 @@ package com.project_3.server.controllers
 
 import com.project_3.server.dto.LoginRequestDTO
 import com.project_3.server.dto.RegisterRequestDTO
-import com.project_3.server.models.Buyer
-import com.project_3.server.models.User
+import com.project_3.server.models.users.Buyer
+import com.project_3.server.models.users.User
 import com.project_3.server.security.Role
 import com.project_3.server.service.AuthService
 import org.springframework.http.ResponseEntity

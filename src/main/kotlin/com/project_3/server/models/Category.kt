@@ -4,10 +4,16 @@ import jakarta.persistence.*
 
 @Entity
 class Category(
-        @Id @GeneratedValue(strategy = GenerationType.IDENTITY) val id: Long? = null,
-        var name: String,
-        @OneToMany(mappedBy = "category", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-        var itemsList: MutableSet<Item> = mutableSetOf(),
-        @OneToMany(mappedBy = "category", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-        var productsList: MutableSet<Item> = mutableSetOf()
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long? = null,
+
+    var name: String,
+
+    @OneToMany(mappedBy = "category", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    var itemsList: MutableSet<Product> = mutableSetOf(),
+
+    @OneToMany(mappedBy = "category", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    var productsList: MutableSet<Product> = mutableSetOf()
+
 )

@@ -1,5 +1,4 @@
-package com.project_3.server.models
-
+package com.project_3.server.models.enums
 
 enum class OrderStatus {
     IN_TRANSIT,   // заказ в пути

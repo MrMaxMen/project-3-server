@@ -1,7 +1,7 @@
 package com.project_3.server.controllers
 
-import com.project_3.server.dto.ItemDTO1
-import com.project_3.server.dto.ProductDTO
+import com.project_3.server.dto.ProductDTO1
+import com.project_3.server.dto.ProductGroupDTO
 import com.project_3.server.service.ProductManagementService
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
@@ -16,23 +16,23 @@ class ProductManagementController (
 
     @PostMapping("/add")
     fun addProduct(
-        @RequestBody newProduct : ProductDTO
+        @RequestBody newProduct : ProductGroupDTO
     ): ResponseEntity<String> {
 
-        productManagementService.addProduct(newProduct)
+        productManagementService.addProductGroup(newProduct)
 
-        return ResponseEntity.ok("Product added successfully")
+        return ResponseEntity.ok("ProductGroup added successfully")
     }
 
-    @PostMapping("/{id}/items/add")
+    @PostMapping("/{id}/products/add")
     fun addProductItem(
-        @RequestBody newItem : ItemDTO1,
+        @RequestBody newItem : ProductDTO1,
         @PathVariable id: Long
     ) : ResponseEntity<String> {
 
-        productManagementService.addItem(productId = id ,newItem = newItem)
+        productManagementService.addProduct(productId = id ,newProduct = newItem)
 
-        return ResponseEntity.ok("Item added successfully")
+        return ResponseEntity.ok("Product added successfully")
     }
 
     @DeleteMapping("/{id}/delete")
@@ -40,43 +40,43 @@ class ProductManagementController (
         @PathVariable id : Long
     ) : ResponseEntity<String> {
 
-        productManagementService.deleteProduct(idProductToDelete = id)
+        productManagementService.deleteProductGroup(idProductGroupToDelete = id)
 
-        return ResponseEntity.ok("product deleted successfully")
+        return ResponseEntity.ok("productGroup deleted successfully")
     }
 
 
-    @DeleteMapping("/items/{id}/delete")
+    @DeleteMapping("/products/{id}/delete")
     fun deleteItem(
         @PathVariable id : Long
     ) : ResponseEntity<String> {
 
-        productManagementService.deleteItem(idItemToDelete =  id)
+        productManagementService.deleteProduct(idProductToDelete =  id)
 
-        return ResponseEntity.ok("item deleted successfully")
+        return ResponseEntity.ok("product deleted successfully")
     }
 
-    @PutMapping("/items/{id}/modify")
+    @PutMapping("/products/{id}/modify")
     fun modifyItem(
-        @RequestBody modifiedItem : ItemDTO1,
+        @RequestBody modifiedItem : ProductDTO1,
         @PathVariable id : Long
     ) : ResponseEntity<String> {
 
-        productManagementService.modifyItem(id,modifiedItem)
+        productManagementService.modifyProductGroup(id,modifiedItem)
 
-        return ResponseEntity.ok("item modified successfully")
+        return ResponseEntity.ok("product modified successfully")
     }
 
 
     @PutMapping("/{id}/modify")
     fun modifyProduct(
-        @RequestBody modifiedProduct : ProductDTO,
+        @RequestBody modifiedProduct : ProductGroupDTO,
         @PathVariable id : Long
     ) : ResponseEntity<String> {
 
-        productManagementService.modifyProduct(id,modifiedProduct)
+        productManagementService.modifyProductGroup(id,modifiedProduct)
 
-        return ResponseEntity.ok("product modified successfully")
+        return ResponseEntity.ok("productGroup modified successfully")
     }
 
 

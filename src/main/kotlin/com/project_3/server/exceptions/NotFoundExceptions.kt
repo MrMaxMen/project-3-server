@@ -9,13 +9,13 @@ abstract class NotFoundByIdException(
 }
 
 
-class ItemNotFoundByIdException(id: Long) : NotFoundByIdException(id)
+class ProductNotFoundByIdException(id: Long) : NotFoundByIdException(id)
 
 class SellerNotFoundByIdException(id: Long) : NotFoundByIdException(id)
 
 class CategoryNotFoundByIdException(id: Long) : NotFoundByIdException(id)
 
-class ProductNotFoundByIdException(id: Long) : NotFoundByIdException(id)
+class ProductGroupNotFoundByIdException(id: Long) : NotFoundByIdException(id)
 
 class PickupPointNotFoundByIdException(id: Long) : NotFoundByIdException(id)
 

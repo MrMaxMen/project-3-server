@@ -5,9 +5,9 @@ import com.project_3.server.dto.RegisterRequestDTO
 import com.project_3.server.exceptions.EmailAlreadyExistsException
 import com.project_3.server.exceptions.InvalidPasswordException
 import com.project_3.server.exceptions.UserNotFoundByEmailException
-import com.project_3.server.models.Buyer
-import com.project_3.server.models.Seller
-import com.project_3.server.models.User
+import com.project_3.server.models.users.Buyer
+import com.project_3.server.models.users.Seller
+import com.project_3.server.models.users.User
 import com.project_3.server.repos.BuyerRepository
 import com.project_3.server.repos.SellerRepository
 import com.project_3.server.security.JwtService

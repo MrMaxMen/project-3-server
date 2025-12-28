@@ -1,101 +1,92 @@
 package com.project_3.server.service
 
 import com.project_3.server.dto.OrderDTO
-import com.project_3.server.dto.OrderItemDTO
 import com.project_3.server.exceptions.BuyerNotFoundByIdException
-import com.project_3.server.exceptions.ItemNotFoundByIdException
+import com.project_3.server.exceptions.DeliveryImpossibleException
 import com.project_3.server.exceptions.PickupPointNotFoundByIdException
+import com.project_3.server.exceptions.ProductNotFoundByIdException
 import com.project_3.server.models.Order
-import com.project_3.server.models.OrderItem
-import com.project_3.server.models.Orthodrome
-import com.project_3.server.models.Stock
-import com.project_3.server.models.StockItem
+import com.project_3.server.models.ProductInOrder
+import com.project_3.server.models.delivery.Orthodrome
+import com.project_3.server.models.stock.Stock
 import com.project_3.server.repos.*
+import java.time.LocalDateTime
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDateTime
 
 @Service
 class OrderManagementService(
-    private val productRepository: ProductRepository,
-    private val itemRepository: ItemRepository,
-    private val categoryRepository: CategoryRepository,
-    private val sellerRepository: SellerRepository,
-    private val orderRepository: OrderRepository,
-    private val buyerRepository: BuyerRepository,
-    private val pickupPointRepository: PickupPointRepository,
-    private val stockRepository: StockRepository,
-    private val stockItemRepository: StockItemRepository,
-    private val orthodromeRepository: OrthodromeRepository
+        private val productRepository: ProductRepository,
+        private val orderRepository: OrderRepository,
+        private val buyerRepository: BuyerRepository,
+        private val pickupPointRepository: PickupPointRepository,
+        private val productOnStockRepository: ProductOnStockRepository,
+        private val orthodromeRepository: OrthodromeRepository
 ) {
 
     @Transactional
-    fun createOrder(buyerId : Long,newOrderDTO : OrderDTO) {
+    fun createOrder(buyerId: Long, newOrderDTO: OrderDTO) {
 
-        val buyer = buyerRepository.findByIdOrNull(buyerId) ?: throw BuyerNotFoundByIdException(buyerId)
+        val buyer =
+                buyerRepository.findByIdOrNull(buyerId) ?: throw BuyerNotFoundByIdException(buyerId)
 
-        val pickupPoint = pickupPointRepository.findByIdOrNull(newOrderDTO.pickupPointId) ?: throw PickupPointNotFoundByIdException(newOrderDTO.pickupPointId)
+        val pickupPoint =
+                pickupPointRepository.findByIdOrNull(newOrderDTO.pickupPointId)
+                        ?: throw PickupPointNotFoundByIdException(newOrderDTO.pickupPointId)
+
+        val newOrder =
+                Order(
+                        orderDateTime = LocalDateTime.now(),
+                        buyer = buyer,
+                        pickupPoint = pickupPoint,
+                )
+
+        val productInOrderList = mutableListOf<ProductInOrder>()
+
+        newOrderDTO.orderProducts.forEach { productInOrderDTO ->
+
+            val product = productRepository.findByIdOrNull(productInOrderDTO.productId) ?: throw ProductNotFoundByIdException(productInOrderDTO.productId)
+
+            val productOnStockList = productOnStockRepository.findByProduct(product)
+
+            val productsOnStockWithValidQuantity =
+                    productOnStockList.filter { it.availableQuantity >= productInOrderDTO.quantity }
+
+            val stocks = mutableListOf<Stock>()
+
+            productsOnStockWithValidQuantity.forEach { stocks.add(it.stock) }
+
+            val orthodromes = orthodromeRepository.findAllByPickupPointIdAndStockIdIn(pickupPoint.id!!,stocks.map { it.id!! })
+
+            val closestOrthodrome = orthodromes.minByOrNull { it.distanceKm }
+                ?: throw DeliveryImpossibleException("Невозможно доставить товар ${product.name} в выбранный ПВЗ: нет логистического маршрута")
 
 
 
-        val newOrder = Order(
-            orderDateTime = LocalDateTime.now(),
-            buyer = buyer,
-            pickupPoint = pickupPoint,
-        )
+            val productInOrder =
+                    ProductInOrder(
+                            order = newOrder,
+                            product = product,
+                            quantity = productInOrderDTO.quantity,
+                            priceAtPurchase = productInOrderDTO.priceAtPurchase,
+                            stock = closestOrthodrome.stock,
+                    )
 
-        val orderItemsList = mutableListOf<OrderItem>()
+            val productOnStock = productOnStockRepository.findByProductAndStock(product, closestOrthodrome.stock)
 
-
-
-        newOrderDTO.orderItems.forEach { orderItem ->
-
-            val item = itemRepository.findByIdOrNull(orderItem.itemId) ?: throw ItemNotFoundByIdException(orderItem.itemId)
-
-            val stockItems : List<StockItem> = stockItemRepository.findByItem(item)
-
-            val stocks : MutableList<Stock> = mutableListOf()
-
-            stockItems.forEach {
-                stocks.add(it.stock)
+            if (productOnStockRepository.reduceStock(id = productOnStock.id!!, quantity = productInOrder.quantity) == 0) { // решение проблемы взаимного исключения (можно лучше)
+                throw DeliveryImpossibleException("Недостаточно товара ${product.name} на складе ${closestOrthodrome.stock.name}")
             }
 
-            val orthodromes : MutableList<Orthodrome> = mutableListOf()
+            // shipment creation call?
 
-            stocks.forEach {
-                val orthodrome = orthodromeRepository.findByStockIdAndPickupPointId(it.id!!,pickupPoint.id!!)
-                orthodromes.add(orthodrome!!)
+            productInOrderList.add(productInOrder)
 
-            }
-
-            val closestOrthodrome = orthodromes.minByOrNull { it.distanceKm }!!
-
-            //shipment creation call
-
-            val orderItem = OrderItem(
-                order = newOrder, // Will be set when the Order is created
-                item = item,
-                quantity = orderItem.quantity,
-                priceAtPurchase = orderItem.priceAtPurchase,
-                stock = closestOrthodrome.stock,
-            )
-
-            val stockItem = stockItemRepository.findByItemAndStock(item,closestOrthodrome.stock)
-            stockItem.availableQuantity -= orderItem.quantity
-
-            orderItemsList.add(orderItem)
         }
 
-        newOrder.orderItems = orderItemsList
-
-
+        newOrder.productInOrders = productInOrderList
 
         orderRepository.save(newOrder)
-
     }
-
-
-
-
 }

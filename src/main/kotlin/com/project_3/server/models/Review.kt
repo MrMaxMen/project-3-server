@@ -1,5 +1,6 @@
 package com.project_3.server.models
 
+import com.project_3.server.models.users.Buyer
 import jakarta.persistence.*
 import java.time.LocalDate
 
@@ -18,11 +19,11 @@ class Review(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn()
-    var item: Item,
+    var product: Product,
 
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn()
     var buyer: Buyer,
 
-)
+    )

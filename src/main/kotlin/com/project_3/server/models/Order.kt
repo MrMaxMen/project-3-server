@@ -1,5 +1,8 @@
 package com.project_3.server.models
 
+import com.project_3.server.models.delivery.PickupPoint
+import com.project_3.server.models.enums.OrderStatus
+import com.project_3.server.models.users.Buyer
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
@@ -20,7 +23,7 @@ class Order(
 
 
     @OneToMany(mappedBy = "order", cascade = [CascadeType.ALL], orphanRemoval = true)
-    var orderItems: MutableList<OrderItem> = mutableListOf(),
+    var productInOrders: MutableList<ProductInOrder> = mutableListOf(),
 
 
     @ManyToOne(fetch = FetchType.LAZY)

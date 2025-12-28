@@ -1,6 +1,6 @@
 package com.project_3.server.dto
 
-data class ItemDTO1(
+data class ProductDTO1(
 
     var name: String,
     var description: String,

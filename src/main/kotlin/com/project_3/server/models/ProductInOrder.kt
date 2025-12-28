@@ -1,9 +1,11 @@
 package com.project_3.server.models
 
+import com.project_3.server.models.enums.OrderItemStatus
+import com.project_3.server.models.stock.Stock
 import jakarta.persistence.*
 
 @Entity
-class OrderItem(
+class ProductInOrder(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
@@ -14,9 +16,9 @@ class OrderItem(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
-    var item: Item,
+    var product: Product,
 
-    var quantity: Int ,
+    var quantity: Int,
 
     var priceAtPurchase: Double,
 
@@ -29,13 +31,5 @@ class OrderItem(
     var status: OrderItemStatus = OrderItemStatus.PENDING
 
 
-
 )
 
-
-enum class OrderItemStatus {
-    PENDING,
-    SHIPPED,
-    DELIVERED,
-    CANCELLED
-}

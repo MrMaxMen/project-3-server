@@ -1,7 +1,7 @@
 package com.project_3.server.service
 
-import com.project_3.server.models.Orthodrome
-import com.project_3.server.models.Stock
+import com.project_3.server.models.delivery.Orthodrome
+import com.project_3.server.models.stock.Stock
 import com.project_3.server.repos.OrthodromeRepository
 import com.project_3.server.repos.PickupPointRepository
 import com.project_3.server.repos.StockRepository

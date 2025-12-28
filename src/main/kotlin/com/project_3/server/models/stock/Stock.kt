@@ -1,6 +1,13 @@
-package com.project_3.server.models
+package com.project_3.server.models.stock
 
-import jakarta.persistence.*
+import com.project_3.server.models.delivery.Orthodrome
+import com.project_3.server.models.stock.ProductOnStock
+import jakarta.persistence.CascadeType
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.OneToMany
 
 @Entity
 class Stock(
@@ -19,5 +26,5 @@ class Stock(
     val orthodromes: MutableList<Orthodrome> = mutableListOf(),
 
     @OneToMany(mappedBy = "stock", cascade = [CascadeType.ALL], orphanRemoval = true)
-    val stockItems: MutableSet<StockItem> = mutableSetOf()
+    val productOnStocks: MutableSet<ProductOnStock> = mutableSetOf()
 )
