@@ -2,40 +2,36 @@ package com.project_3.server.models
 
 import jakarta.persistence.*
 
+
 @Entity
-class OrderItem(
+class Shipment (
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
-    var order: Order,
+    var orderItems: MutableList<OrderItem> = mutableListOf(),
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
-    var item: Item,
-
-    var quantity: Int ,
-
-    var priceAtPurchase: Double,
-
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     var stock: Stock,
 
 
-    @Enumerated(EnumType.STRING)
-    var status: OrderItemStatus = OrderItemStatus.PENDING
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
+    var pickupPoints: MutableList<PickupPoint> = mutableListOf(),
 
+
+    @Enumerated(EnumType.STRING)
+    var status: ShipmentStatus = ShipmentStatus.IN_TRANSIT
 
 
 )
 
-
-enum class OrderItemStatus {
-    PENDING,
-    SHIPPED,
+enum class ShipmentStatus {
+    IN_TRANSIT,
     DELIVERED,
     CANCELLED
 }

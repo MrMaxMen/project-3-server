@@ -17,5 +17,6 @@ class StockItem(
     @JoinColumn(name = "item_id")
     val item: Item,
 
-    var quantity: Int
+    var realQuantity: Int,
+    var availableQuantity: Int,
 )

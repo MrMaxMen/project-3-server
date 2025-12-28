@@ -16,6 +16,7 @@ import com.project_3.server.repos.ProductRepository
 import com.project_3.server.repos.SellerRepository
 import com.project_3.server.repos.StockItemRepository
 import com.project_3.server.repos.StockRepository
+import com.project_3.server.service.OrthodromeService
 import org.springframework.boot.CommandLineRunner
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -31,7 +32,8 @@ class DatabaseInitializer(
         private val stockRepository: StockRepository,
         private val stockItemRepository: StockItemRepository,
         private val pickupPointRepository: PickupPointRepository,
-        private val passwordEncoder: PasswordEncoder
+        private val passwordEncoder: PasswordEncoder,
+        private val orthodromeService: OrthodromeService
 ) {
         @Bean
         fun initDatabase(): CommandLineRunner = CommandLineRunner {
@@ -114,6 +116,11 @@ class DatabaseInitializer(
 
 
                 println("✅Database initialized with sample data.")
+
+
+                orthodromeService.calculateAllOrthodromes()
+
+
 
         }
 }
