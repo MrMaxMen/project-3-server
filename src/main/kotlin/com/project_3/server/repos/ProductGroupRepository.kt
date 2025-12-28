@@ -1,8 +1,8 @@
 package com.project_3.server.repos
 
-import com.project_3.server.models.OrderItem
+import com.project_3.server.models.ProductGroup
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface OrderItemRepository : JpaRepository<OrderItem, Long>
+interface ProductGroupRepository : JpaRepository<ProductGroup, Long>
