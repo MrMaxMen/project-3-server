@@ -5,9 +5,8 @@ import com.project_3.server.exceptions.BuyerNotFoundByIdException
 import com.project_3.server.exceptions.DeliveryImpossibleException
 import com.project_3.server.exceptions.PickupPointNotFoundByIdException
 import com.project_3.server.exceptions.ProductNotFoundByIdException
-import com.project_3.server.models.Order
-import com.project_3.server.models.ProductInOrder
-import com.project_3.server.models.delivery.Orthodrome
+import com.project_3.server.models.order.Order
+import com.project_3.server.models.order.ProductInOrder
 import com.project_3.server.models.stock.Stock
 import com.project_3.server.repos.*
 import java.time.LocalDateTime
@@ -79,7 +78,7 @@ class OrderManagementService(
                 throw DeliveryImpossibleException("Недостаточно товара ${product.name} на складе ${closestOrthodrome.stock.name}")
             }
 
-            // shipment creation call?
+            // logistics creation call? нет создание productInOrder достаточно , оно само является заявкой на доставку
 
             productInOrderList.add(productInOrder)
 

@@ -2,6 +2,7 @@ package com.project_3.server.service
 
 import com.project_3.server.dto.ProductDTO1
 import com.project_3.server.dto.ProductGroupDTO
+import com.project_3.server.dto.SellerToStockInboundDTO
 import com.project_3.server.exceptions.*
 import com.project_3.server.models.Product
 import com.project_3.server.models.ProductGroup
@@ -24,7 +25,7 @@ class ProductManagementService(
     @Transactional
     fun addProductGroup(newProductGroupDTO: ProductGroupDTO) {
 
-        if (newProductGroupDTO.items.isEmpty()) throw ProductGroupCreationErrorException()
+        if (newProductGroupDTO.products.isEmpty()) throw ProductGroupCreationErrorException()
 
         val seller =
                 sellerRepository.findByIdOrNull(newProductGroupDTO.sellerId)
@@ -38,7 +39,7 @@ class ProductManagementService(
 
         val productGroups =
                 newProductGroupDTO
-                        .items
+                        .products
                         .map {
                             Product(
                                     name = it.name,
@@ -51,7 +52,11 @@ class ProductManagementService(
                                     reviewCount = null,
                                     seller = seller,
                                     category = category,
-                                    productGroup = newProductGroup
+                                    productGroup = newProductGroup,
+                                    weightGrams = it.weightGrams,
+                                    lengthMm = it.lengthMm,
+                                    widthMm = it.widthMm,
+                                    heightMm = it.heightMm,
                             )
                         }
                         .toMutableSet()
@@ -81,6 +86,10 @@ class ProductManagementService(
                         seller = productGroup.seller,
                         category = productGroup.category,
                         productGroup = productGroup,
+                        weightGrams = newProduct.weightGrams,
+                        lengthMm = newProduct.lengthMm,
+                        widthMm = newProduct.widthMm,
+                        heightMm = newProduct.heightMm,
                 )
         )
 
@@ -135,5 +144,25 @@ class ProductManagementService(
         productGroup.name = modifiedProductGroup.name
 
         productGroupRepository.save(productGroup)
+    }
+
+    fun getTotalStockQuantity(id: Long): Int {
+        val product =
+                productRepository.findByIdOrNull(id)
+                        ?: throw ProductNotFoundByIdException(id)
+
+        val totalQuantity = product.productOnStocks.sumOf { it.availableQuantity }
+        return totalQuantity
+    }
+
+    @Transactional
+    fun createInboundRequest(id: Long , inboundRequestDTO : SellerToStockInboundDTO) {
+
+        val product =
+                productRepository.findByIdOrNull(id)
+                        ?: throw ProductNotFoundByIdException(id)
+
+        // Implementation of inbound request creation logic goes here
+
     }
 }

@@ -1,7 +1,6 @@
-package com.project_3.server.models.delivery
+package com.project_3.server.models.logistics
 
-import com.project_3.server.models.Order
-import com.project_3.server.models.delivery.Orthodrome
+import com.project_3.server.models.order.Order
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue

@@ -1,9 +1,20 @@
-package com.project_3.server.models
+package com.project_3.server.models.order
 
-import com.project_3.server.models.delivery.PickupPoint
+import com.project_3.server.models.logistics.PickupPoint
 import com.project_3.server.models.enums.OrderStatus
 import com.project_3.server.models.users.Buyer
-import jakarta.persistence.*
+import jakarta.persistence.CascadeType
+import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
+import jakarta.persistence.FetchType
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.ManyToOne
+import jakarta.persistence.OneToMany
+import jakarta.persistence.Table
 import java.time.LocalDateTime
 
 @Entity
@@ -34,4 +45,3 @@ class Order(
     var status: OrderStatus = OrderStatus.IN_TRANSIT
 
 )
-

@@ -1,6 +1,6 @@
 package com.project_3.server.models.users
 
-import com.project_3.server.models.Order
+import com.project_3.server.models.order.Order
 import com.project_3.server.models.Product
 import com.project_3.server.models.Review
 import jakarta.persistence.CascadeType

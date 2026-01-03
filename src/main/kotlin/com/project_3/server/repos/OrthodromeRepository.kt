@@ -1,6 +1,6 @@
 package com.project_3.server.repos
 
-import com.project_3.server.models.delivery.Orthodrome
+import com.project_3.server.models.logistics.Orthodrome
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface OrthodromeRepository : JpaRepository<Orthodrome, Long> {

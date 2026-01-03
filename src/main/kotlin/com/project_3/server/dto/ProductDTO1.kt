@@ -9,6 +9,12 @@ data class ProductDTO1(
     var stock : Int,
     var discount : Double? = null,
     var currentPrice : Double,
-    var quantity : Int
+    var quantity : Int,
+
+    var weightGrams: Int,
+
+    var lengthMm: Int,
+    var widthMm: Int,
+    var heightMm: Int,
 
 )

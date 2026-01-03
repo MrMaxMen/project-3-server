@@ -2,6 +2,7 @@ package com.project_3.server.controllers
 
 import com.project_3.server.dto.ProductDTO1
 import com.project_3.server.dto.ProductGroupDTO
+import com.project_3.server.dto.SellerToStockInboundDTO
 import com.project_3.server.service.ProductManagementService
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
@@ -9,34 +10,34 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @PreAuthorize("hasRole('SELLER')")
-@RequestMapping("/api/seller/products")
+@RequestMapping("/api/seller/productGroups")
 class ProductManagementController (
     private val productManagementService: ProductManagementService
 ){
 
     @PostMapping("/add")
-    fun addProduct(
-        @RequestBody newProduct : ProductGroupDTO
+    fun addProductGroup(
+        @RequestBody newProductGroup : ProductGroupDTO
     ): ResponseEntity<String> {
 
-        productManagementService.addProductGroup(newProduct)
+        productManagementService.addProductGroup(newProductGroup)
 
         return ResponseEntity.ok("ProductGroup added successfully")
     }
 
     @PostMapping("/{id}/products/add")
-    fun addProductItem(
-        @RequestBody newItem : ProductDTO1,
+    fun addProduct(
+        @RequestBody newProduct : ProductDTO1,
         @PathVariable id: Long
     ) : ResponseEntity<String> {
 
-        productManagementService.addProduct(productId = id ,newProduct = newItem)
+        productManagementService.addProduct(productId = id ,newProduct = newProduct)
 
         return ResponseEntity.ok("Product added successfully")
     }
 
     @DeleteMapping("/{id}/delete")
-    fun deleteProduct(
+    fun deleteProductGroup(
         @PathVariable id : Long
     ) : ResponseEntity<String> {
 
@@ -47,7 +48,7 @@ class ProductManagementController (
 
 
     @DeleteMapping("/products/{id}/delete")
-    fun deleteItem(
+    fun deleteProduct(
         @PathVariable id : Long
     ) : ResponseEntity<String> {
 
@@ -57,29 +58,46 @@ class ProductManagementController (
     }
 
     @PutMapping("/products/{id}/modify")
-    fun modifyItem(
-        @RequestBody modifiedItem : ProductDTO1,
+    fun modifyProduct(
+        @RequestBody modifiedProduct : ProductDTO1,
         @PathVariable id : Long
     ) : ResponseEntity<String> {
 
-        productManagementService.modifyProductGroup(id,modifiedItem)
+        productManagementService.modifyProductGroup(id, modifiedProduct)
 
         return ResponseEntity.ok("product modified successfully")
     }
 
 
     @PutMapping("/{id}/modify")
-    fun modifyProduct(
-        @RequestBody modifiedProduct : ProductGroupDTO,
+    fun modifyProductGroup(
+        @RequestBody modifiedProductGroup : ProductGroupDTO,
         @PathVariable id : Long
     ) : ResponseEntity<String> {
 
-        productManagementService.modifyProductGroup(id,modifiedProduct)
+        productManagementService.modifyProductGroup(id, modifiedProductGroup)
 
         return ResponseEntity.ok("productGroup modified successfully")
     }
 
 
+    @GetMapping("/product/{id}/getTotalStockQuantity")
+    fun getTotalStockQuantity(
+        @PathVariable id : Long
+    ) : ResponseEntity<Int> {
+        val totalQuantity = productManagementService.getTotalStockQuantity(id)
+        return ResponseEntity.ok(totalQuantity)
+    }
 
 
+    @PostMapping("/product/{id}/inboundRequest")
+    fun createInboundRequest(
+        @PathVariable id : Long,
+        @RequestBody inboundRequestDTO : SellerToStockInboundDTO
+    ) : ResponseEntity<String> {
+
+        productManagementService.createInboundRequest(id, inboundRequestDTO)
+
+        return ResponseEntity.ok("Inbound request created successfully")
+    }
 }

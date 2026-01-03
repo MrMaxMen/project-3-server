@@ -11,9 +11,9 @@ class Category(
     var name: String,
 
     @OneToMany(mappedBy = "category", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    var itemsList: MutableSet<Product> = mutableSetOf(),
+    var productList: MutableSet<Product> = mutableSetOf(),
 
     @OneToMany(mappedBy = "category", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    var productsList: MutableSet<Product> = mutableSetOf()
+    var productGroupList: MutableSet<ProductGroup> = mutableSetOf()
 
 )

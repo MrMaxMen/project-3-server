@@ -1,4 +1,4 @@
-package com.project_3.server.models.delivery
+package com.project_3.server.models.logistics
 
 import com.project_3.server.models.stock.Stock
 import jakarta.persistence.Column

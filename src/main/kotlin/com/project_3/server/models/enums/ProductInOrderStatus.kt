@@ -1,7 +1,9 @@
 package com.project_3.server.models.enums
 
-enum class ShipmentStatus {
+enum class ProductInOrderStatus {
+    PENDING,
     IN_TRANSIT,
+    SHIPPED,
     DELIVERED,
     CANCELLED
 }

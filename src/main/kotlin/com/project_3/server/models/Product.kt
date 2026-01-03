@@ -1,6 +1,7 @@
 package com.project_3.server.models
 
 import com.fasterxml.jackson.annotation.JsonBackReference
+import com.project_3.server.models.order.ProductInOrder
 import com.project_3.server.models.stock.ProductOnStock
 import com.project_3.server.models.users.Seller
 import jakarta.persistence.*
@@ -8,48 +9,56 @@ import jakarta.persistence.*
 @Entity
 class Product(
 
-        @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
         val id: Long? = null,
 
-        var name: String,
+    var name: String,
 
-        var description: String,
+    var description: String,
 
-        var mediaURLs: MutableList<String> = mutableListOf(),
 
-        var basePrice: Double, // may be changed by the seller
+    var weightGrams: Int,
 
-        var discount: Double? = null,
+    var lengthMm: Int,
+    var widthMm: Int,
+    var heightMm: Int,
 
-        var currentPrice: Double , //base price - discount
 
-        var rating: Double? = null, // calculatable
+    var mediaURLs: MutableList<String> = mutableListOf(),
 
-        var reviewCount: Int? = null,
+    var basePrice: Double, // may be changed by the seller
 
-        //        var totalQuantity: Int, // под вопросом (это значение лучше вычислять)
+    var discount: Double? = null,
 
-        var priceHistory: MutableList<Double> = mutableListOf(),
+    var currentPrice: Double, //base price - discount
 
-        @ManyToOne(fetch = FetchType.LAZY)
-        @JoinColumn
-        var seller: Seller,
+    var rating: Double? = null, // calculatable
 
-        @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-        var reviewList: MutableSet<Review> = mutableSetOf(),
+    var reviewCount: Int? = null,
 
-        @ManyToOne(fetch = FetchType.LAZY)
-        @JoinColumn
-        var category: Category,
+//    var totalQuantity: Int, // под вопросом (это значение лучше вычислять)
 
-        @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], orphanRemoval = true)
-        var productInOrders: MutableSet<ProductInOrder> = mutableSetOf(),
+    var priceHistory: MutableList<Double> = mutableListOf(),
 
-        @ManyToOne(fetch = FetchType.LAZY)
-        @JoinColumn
-        @JsonBackReference
-        var productGroup: ProductGroup,
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
+    var seller: Seller,
 
-        @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], orphanRemoval = true)
-        var productOnStocks: MutableSet<ProductOnStock> = mutableSetOf()
+    @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    var reviewList: MutableSet<Review> = mutableSetOf(),
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
+    var category: Category,
+
+    @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var productInOrders: MutableSet<ProductInOrder> = mutableSetOf(),
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
+    @JsonBackReference
+    var productGroup: ProductGroup,
+
+    @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var productOnStocks: MutableSet<ProductOnStock> = mutableSetOf()
 )
