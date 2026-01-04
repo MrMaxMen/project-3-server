@@ -16,9 +16,17 @@ import jakarta.persistence.ManyToOne
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 abstract class Transportation(
-        @Id @GeneratedValue(strategy = GenerationType.IDENTITY) val id: Long? = null,
+
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        val id: Long? = null,
+
         @Enumerated(EnumType.STRING)
         var status: TransportationStatus = TransportationStatus.WAITING,
-        @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(nullable = false) var vehicle: Vehicle,
+
+        @ManyToOne(fetch = FetchType.LAZY)
+        @JoinColumn(nullable = false)
+        var vehicle: Vehicle,
+
         var departureTime: java.time.LocalDateTime? = null
 )

@@ -11,7 +11,10 @@ import jakarta.persistence.OneToMany
 
 @Entity
 class Supply(
+
     var sourceAddress: String,
+    var sourceLatitude: Double,
+    var sourceLongitude: Double,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)

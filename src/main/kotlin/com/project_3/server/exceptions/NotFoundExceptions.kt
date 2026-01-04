@@ -21,6 +21,10 @@ class PickupPointNotFoundByIdException(id: Long) : NotFoundByIdException(id)
 
 class BuyerNotFoundByIdException(id: Long) : NotFoundByIdException(id)
 
+class DeliveryNotFoundByIdException(id: Long) : NotFoundByIdException(id)
+
+class VehicleNotFoundByIdException(id: Long) : NotFoundByIdException(id)
+
 
 
 class UserNotFoundByEmailException(val email: String) : RuntimeException("User with email: $email not found")
