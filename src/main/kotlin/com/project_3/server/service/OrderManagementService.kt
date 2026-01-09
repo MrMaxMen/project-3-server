@@ -78,7 +78,7 @@ class OrderManagementService(
                 throw DeliveryImpossibleException("Недостаточно товара ${product.name} на складе ${closestOrthodrome.stock.name}")
             }
 
-            // logistics creation call? нет создание productInOrder достаточно , оно само является заявкой на доставку
+
 
             productInOrderList.add(productInOrder)
 
@@ -88,4 +88,7 @@ class OrderManagementService(
 
         orderRepository.save(newOrder)
     }
+
+    @Transactional
+    fun completeOrder(){}
 }

@@ -26,13 +26,10 @@ class TransportController (
 
     @PostMapping("/create-supply-transportation")
     fun createSupplyTransportation(
-        @RequestBody supplyCreationDTO: SupplyCreationDTO,
-        authentication: Authentication
+        @RequestBody supplyCreationDTO: SupplyCreationDTO //ограничение партии по весу и объёму на клиенте
     ): ResponseEntity<String> {
 
-        val sellerId = authentication.name.toLong()
-
-        transportService.createSupply(sellerId,supplyCreationDTO)
+        transportService.createSupply(supplyCreationDTO)
 
         return ResponseEntity.ok("Supply transportation creation process initiated.")
     }

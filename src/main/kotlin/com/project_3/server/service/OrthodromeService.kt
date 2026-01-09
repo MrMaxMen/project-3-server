@@ -1,6 +1,7 @@
 package com.project_3.server.service
 
 import com.project_3.server.models.logistics.Orthodrome
+import com.project_3.server.models.stock.Stock
 import com.project_3.server.repos.OrthodromeRepository
 import com.project_3.server.repos.PickupPointRepository
 import com.project_3.server.repos.StockRepository
@@ -21,10 +22,6 @@ class OrthodromeService(
 ) {
 
     private val logger = LoggerFactory.getLogger(javaClass)
-
-
-
-
 
     @Transactional
     fun calculateAllOrthodromes() {
@@ -168,6 +165,20 @@ class OrthodromeService(
 
 
         calculateOrthodromesForPickupPoint(pickupPointId)
+    }
+
+    fun closestStockForAddress(latitude: Double , longitude: Double) : Stock {
+
+        val stocks = stockRepository.findAll()
+
+        val distances = mutableListOf<Pair<Stock, Double>>()
+
+        stocks.forEach { stock ->
+            distances.add(Pair(stock,calculateHaversineDistance(latitude, longitude, stock.latitude, stock.longitude)))
+        }
+
+        return distances.minBy { it.second }.first
+
     }
 
 

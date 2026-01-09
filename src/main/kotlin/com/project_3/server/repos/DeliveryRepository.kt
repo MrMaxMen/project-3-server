@@ -6,5 +6,6 @@ import com.project_3.server.models.stock.Stock
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface DeliveryRepository : JpaRepository<Delivery, Long> {
-    fun findBySourceStockAndStatus(sourceStock: Stock, status: TransportationStatus): List<Delivery>
+    fun findAllBySourceStockAndStatus(sourceStock: Stock, status: TransportationStatus): List<Delivery>
+    fun findAllByStatus(status: TransportationStatus) : List<Delivery>
 }

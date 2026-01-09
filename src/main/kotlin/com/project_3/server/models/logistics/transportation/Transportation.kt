@@ -25,8 +25,8 @@ abstract class Transportation(
         var status: TransportationStatus = TransportationStatus.WAITING,
 
         @ManyToOne(fetch = FetchType.LAZY)
-        @JoinColumn(nullable = false)
-        var vehicle: Vehicle,
+        @JoinColumn
+        var vehicle: Vehicle? = null,
 
         var departureTime: java.time.LocalDateTime? = null
 )

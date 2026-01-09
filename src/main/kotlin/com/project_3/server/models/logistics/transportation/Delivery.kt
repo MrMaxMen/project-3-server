@@ -26,6 +26,6 @@ class Delivery(
     var currentVolumeM3: Double = 0.0,
 
 
-    vehicle: Vehicle,
+    vehicle: Vehicle? = null,
     status: TransportationStatus
 ) : Transportation(vehicle = vehicle, status = status)

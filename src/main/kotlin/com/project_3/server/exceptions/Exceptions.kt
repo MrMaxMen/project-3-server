@@ -13,3 +13,7 @@ class ProductGroupCreationErrorException(
 class DeliveryImpossibleException(
     msg : String
 ) : RuntimeException(msg)
+
+class SupplyBatchWeightExceededException : RuntimeException("Total weight of the supply batch exceeded the vehicle's carrying capacity")
+
+class SupplyBatchVolumeExceededException : RuntimeException("Total volume of the supply batch exceeded the vehicle's carrying volume")
