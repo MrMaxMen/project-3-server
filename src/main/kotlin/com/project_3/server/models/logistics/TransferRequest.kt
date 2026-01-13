@@ -9,18 +9,29 @@ import java.time.LocalDateTime
 
 @Entity
 class TransferRequest(
-        @Id @GeneratedValue(strategy = GenerationType.IDENTITY) val id: Long? = null,
-        @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(nullable = false) val sourceStock: Stock,
+
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        val id: Long? = null,
+
+        @ManyToOne(fetch = FetchType.LAZY)
+        @JoinColumn(nullable = false)
+        val sourceStock: Stock,
+
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(nullable = false)
         val destinationStock: Stock,
+
         @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
         @JoinColumn(name = "product_batch_id", nullable = false)
         val productBatch: ProductBatch,
+
         @Enumerated(EnumType.STRING)
         var status: TransferRequestStatus = TransferRequestStatus.PENDING,
+
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "transfer_id")
         var transfer: Transfer? = null,
+
         val createdAt: LocalDateTime = LocalDateTime.now()
 )

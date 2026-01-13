@@ -27,6 +27,10 @@ class VehicleNotFoundByIdException(id: Long) : NotFoundByIdException(id)
 
 class StockNotFoundByIdException(id: Long) : NotFoundByIdException(id)
 
+class TransferNotFoundByIdException(id: Long) : NotFoundByIdException(id)
+
+class SupplyNotFoundByIdException(id: Long) : NotFoundByIdException(id)
+
 
 
 class UserNotFoundByEmailException(val email: String) : RuntimeException("User with email: $email not found")

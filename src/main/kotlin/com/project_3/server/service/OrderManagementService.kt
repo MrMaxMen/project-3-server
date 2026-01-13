@@ -73,6 +73,7 @@ class OrderManagementService(
                     )
 
             val productOnStock = productOnStockRepository.findByProductAndStock(product, closestOrthodrome.stock)
+                    ?: throw DeliveryImpossibleException("Товар ${product.name} отсутствует на складе ${closestOrthodrome.stock.name}")
 
             if (productOnStockRepository.reduceStock(id = productOnStock.id!!, quantity = productInOrder.quantity) == 0) { // решение проблемы взаимного исключения (можно лучше)
                 throw DeliveryImpossibleException("Недостаточно товара ${product.name} на складе ${closestOrthodrome.stock.name}")

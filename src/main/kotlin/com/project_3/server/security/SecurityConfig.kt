@@ -41,7 +41,9 @@ class SecurityConfig(
                     .requestMatchers(
                         "/api/auth/register",  // Регистрация
                         "/api/auth/login",     // Логин
-                        "/api/public/**"       // Любые публичные эндпоинты
+                        "/api/public/**",
+                        "/swagger-ui/**",      // Swagger UI (html, js, css)
+                        "/v3/api-docs/**"      // OpenAPI описание
                     ).permitAll()
                     
                     // ВСЕ ОСТАЛЬНЫЕ эндпоинты требуют токен

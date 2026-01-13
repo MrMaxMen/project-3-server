@@ -3,6 +3,7 @@ package com.project_3.server.models.logistics.transportation
 import com.project_3.server.models.enums.TransportationStatus
 import com.project_3.server.models.order.ProductInOrder
 import com.project_3.server.models.stock.Stock
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
 import jakarta.persistence.JoinColumn
@@ -17,7 +18,7 @@ class Delivery(
     var sourceStock: Stock,
 
 
-    @OneToMany(mappedBy = "delivery")
+    @OneToMany(mappedBy = "delivery",cascade = [CascadeType.ALL])
     var productInOrderList: MutableList<ProductInOrder> = mutableListOf(),
 
     var waitingTimeMinutes: Int = 0,

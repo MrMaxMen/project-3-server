@@ -32,7 +32,8 @@ class ProductInOrder(
         var priceAtPurchase: Double,
 
         @ManyToOne(fetch = FetchType.LAZY)
-        @JoinColumn(nullable = false) var stock: Stock,
+        @JoinColumn(nullable = false)
+        var stock: Stock,
 
         @Enumerated(EnumType.STRING)
         var status: ProductInOrderStatus = ProductInOrderStatus.PENDING,

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository
 
 @Repository interface ProductOnStockRepository : JpaRepository<ProductOnStock, Long>{
     fun findByProduct(product: Product): List<ProductOnStock>
-    fun findByProductAndStock(product : Product, stock: Stock): ProductOnStock
+    fun findByProductAndStock(product : Product, stock: Stock): ProductOnStock?
 
     @Modifying
     @Query("UPDATE ProductOnStock p SET p.availableQuantity = p.availableQuantity - :quantity WHERE p.id = :id AND p.availableQuantity >= :quantity")
